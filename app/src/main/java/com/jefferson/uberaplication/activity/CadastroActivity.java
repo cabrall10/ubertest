@@ -1,14 +1,20 @@
 package com.jefferson.uberaplication.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.jefferson.uberaplication.R;
+import com.jefferson.uberaplication.config.ConfiguracaoFireBase;
 import com.jefferson.uberaplication.model.Usuario;
 
 public class CadastroActivity extends AppCompatActivity {
@@ -30,7 +36,7 @@ public class CadastroActivity extends AppCompatActivity {
 
     }
 
-    public void validarCadastroUsuario(){
+    public void validarCadastroUsuario(View view){
         String textoNome = campoNome.getText().toString();
         String textoEmail = campoEmail.getText().toString();
         String textoSenha = campoSenha.getText().toString();
@@ -61,7 +67,20 @@ public class CadastroActivity extends AppCompatActivity {
     }
 
     public void cadastrarUsuario( Usuario usuario ){
+        autentificacao = ConfiguracaoFireBase.getFirebaseAutenticacao();
+        autentificacao.createUserWithEmailAndPassword(
+                usuario.getEmail(),
+                usuario.getSenha()
+        ).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
 
+                if( task.isSuccessful() ){
+                    Toast.makeText(CadastroActivity.this, "Sucesso ao cadastrar Usuário!", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
     }
 
     public String verificaTipoUsuario(){
