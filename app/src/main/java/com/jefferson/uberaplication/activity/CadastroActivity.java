@@ -3,6 +3,7 @@ package com.jefferson.uberaplication.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Switch;
@@ -80,6 +81,21 @@ public class CadastroActivity extends AppCompatActivity {
                     String idUsuario = task.getResult().getUser().getUid();
                     usuario.setId( idUsuario );
                     usuario.salvar();
+
+                    // Redireciona o usuário com base no seu tipo
+                    // Se o usuário for passageiro chama a activity
+                    // senão chama a activity requisicoes
+                    if( verificaTipoUsuario() == "P" ){
+                        startActivity(new Intent(CadastroActivity.this, MapsActivity.class));
+                        finish();
+
+                        Toast.makeText(CadastroActivity.this, "Sucesso ao cadastrar Passageiro!", Toast.LENGTH_SHORT).show();
+                    }else{
+                        startActivity(new Intent(CadastroActivity.this, RequisicoesActivity.class));
+                        finish();
+
+                        Toast.makeText(CadastroActivity.this, "Sucesso ao cadastrar Motorista!", Toast.LENGTH_SHORT).show();
+                    }
 
                 }
 
