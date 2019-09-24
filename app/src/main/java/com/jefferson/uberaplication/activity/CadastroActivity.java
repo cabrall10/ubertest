@@ -66,7 +66,7 @@ public class CadastroActivity extends AppCompatActivity {
             }
     }
 
-    public void cadastrarUsuario( Usuario usuario ){
+    public void cadastrarUsuario(final Usuario usuario ){
         autentificacao = ConfiguracaoFireBase.getFirebaseAutenticacao();
         autentificacao.createUserWithEmailAndPassword(
                 usuario.getEmail(),
@@ -76,7 +76,11 @@ public class CadastroActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
 
                 if( task.isSuccessful() ){
-                    Toast.makeText(CadastroActivity.this, "Sucesso ao cadastrar Usuário!", Toast.LENGTH_SHORT).show();
+
+                    String idUsuario = task.getResult().getUser().getUid();
+                    usuario.setId( idUsuario );
+                    usuario.salvar();
+
                 }
 
             }

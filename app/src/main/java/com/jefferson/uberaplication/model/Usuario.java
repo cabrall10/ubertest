@@ -1,5 +1,9 @@
 package com.jefferson.uberaplication.model;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
+import com.jefferson.uberaplication.config.ConfiguracaoFireBase;
+
 public class Usuario {
 
     private String id;
@@ -9,6 +13,13 @@ public class Usuario {
     private String tipo;
 
     public Usuario() {
+    }
+
+    public void salvar(){
+        DatabaseReference firebaseRef = ConfiguracaoFireBase.getFirebaseDataBase();
+        DatabaseReference usuarios = firebaseRef.child( "usuarios" ).child( getId() );
+
+        usuarios.setValue( this );
     }
 
     public String getId() {
@@ -35,6 +46,7 @@ public class Usuario {
         this.email = email;
     }
 
+    @Exclude
     public String getSenha() {
         return senha;
     }
