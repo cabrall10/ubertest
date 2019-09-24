@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.jefferson.uberaplication.R;
+import com.jefferson.uberaplication.helper.UsuarioFirebase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,5 +27,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void abrirTelaCadastro(View view){
         startActivity(new Intent(this, CadastroActivity.class));
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        UsuarioFirebase.redirecionaUsuarioLogado(MainActivity.this);
     }
 }

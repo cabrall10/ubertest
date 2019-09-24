@@ -52,27 +52,33 @@ public class UsuarioFirebase {
     }
 
     public static void redirecionaUsuarioLogado(final Activity activity){
-        DatabaseReference usuariosRef = ConfiguracaoFireBase.getFirebaseDataBase()
-                .child( "usuarios" )
-                .child( getIdentificadorUsuario() );
-        usuariosRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Usuario usuario = dataSnapshot.getValue(Usuario.class);
 
-                String tipoUsuario = usuario.getTipo();
-                if(tipoUsuario.equals("M")){
-                    activity.startActivity(new Intent(activity, RequisicoesActivity.class));
-                }else{
-                    activity.startActivity(new Intent(activity, MapsActivity.class));
+        FirebaseUser user = getUsuarioAtual();
+        if(user != null ){
+            DatabaseReference usuariosRef = ConfiguracaoFireBase.getFirebaseDataBase()
+                    .child( "usuarios" )
+                    .child( getIdentificadorUsuario() );
+            usuariosRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Usuario usuario = dataSnapshot.getValue(Usuario.class);
+
+                    String tipoUsuario = usuario.getTipo();
+                    if(tipoUsuario.equals("M")){
+                        activity.startActivity(new Intent(activity, RequisicoesActivity.class));
+                    }else{
+                        activity.startActivity(new Intent(activity, MapsActivity.class));
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
+
+
     }
 
     public static String getIdentificadorUsuario(){
