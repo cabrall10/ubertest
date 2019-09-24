@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.jefferson.uberaplication.R;
 import com.jefferson.uberaplication.config.ConfiguracaoFireBase;
+import com.jefferson.uberaplication.helper.UsuarioFirebase;
 import com.jefferson.uberaplication.model.Usuario;
 
 public class CadastroActivity extends AppCompatActivity {
@@ -85,6 +86,9 @@ public class CadastroActivity extends AppCompatActivity {
                         String idUsuario = task.getResult().getUser().getUid();
                         usuario.setId( idUsuario );
                         usuario.salvar();
+
+                        //Atualizar nome no UserProfile
+                        UsuarioFirebase.atualizarNomeUsuario( usuario.getNome() );
 
                         // Redireciona o usuário com base no seu tipo
                         // Se o usuário for passageiro chama a activity
