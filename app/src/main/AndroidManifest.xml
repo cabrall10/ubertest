@@ -39,7 +39,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAYTvSKm4mXBYyCx_4dbhFUpI1BX-BmWK4" />
+            android:value="AIzaSyC6-dhjobLe0UGMslBn3QRNWkhOBk_PqKA" />
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
