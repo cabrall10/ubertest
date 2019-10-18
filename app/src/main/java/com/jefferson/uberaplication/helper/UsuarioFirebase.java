@@ -15,7 +15,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.jefferson.uberaplication.activity.MapsActivity;
+import com.jefferson.uberaplication.activity.PassageiroActivity;
 import com.jefferson.uberaplication.activity.RequisicoesActivity;
 import com.jefferson.uberaplication.config.ConfiguracaoFireBase;
 import com.jefferson.uberaplication.model.Usuario;
@@ -67,7 +67,7 @@ public class UsuarioFirebase {
                     if(tipoUsuario.equals("M")){
                         activity.startActivity(new Intent(activity, RequisicoesActivity.class));
                     }else{
-                        activity.startActivity(new Intent(activity, MapsActivity.class));
+                        activity.startActivity(new Intent(activity, PassageiroActivity.class));
                     }
                 }
 
