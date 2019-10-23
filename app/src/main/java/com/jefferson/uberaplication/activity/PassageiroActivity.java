@@ -37,7 +37,10 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.jefferson.uberaplication.R;
 import com.jefferson.uberaplication.config.ConfiguracaoFireBase;
+import com.jefferson.uberaplication.helper.UsuarioFirebase;
 import com.jefferson.uberaplication.model.Destino;
+import com.jefferson.uberaplication.model.Requisicao;
+import com.jefferson.uberaplication.model.Usuario;
 
 import java.io.IOException;
 import java.util.List;
@@ -50,6 +53,8 @@ public class PassageiroActivity extends AppCompatActivity
     private FirebaseAuth autenticacao;
     private LocationManager locationManager;
     private LocationListener locationListener;
+    private LatLng localPassageiro;
+
     private EditText editDestino;
 
     @Override
@@ -76,7 +81,7 @@ public class PassageiroActivity extends AppCompatActivity
             Address addressDestino = recuperaEndereco(enderecoDestino);
             if(addressDestino != null){
 
-                Destino destino = new Destino();
+                final Destino destino = new Destino();
                 destino.setCidade(addressDestino.getAdminArea());
                 destino.setCep(addressDestino.getPostalCode());
                 destino.setBairro(addressDestino.getSubLocality());
@@ -99,6 +104,8 @@ public class PassageiroActivity extends AppCompatActivity
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //salvar requisição
+                                salvarRequisicao(destino);
+
                             }
                         }).setNegativeButton("cancelar", new DialogInterface.OnClickListener() {
                             @Override
@@ -112,6 +119,20 @@ public class PassageiroActivity extends AppCompatActivity
         }else{
             Toast.makeText(this, "Informe endereço de destino!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void salvarRequisicao(Destino destino){
+
+        Requisicao requisicao = new Requisicao();
+        requisicao.setDestino( destino );
+
+        Usuario usuarioPassageiro = UsuarioFirebase.getDadosUsuarioLogado();
+        usuarioPassageiro.setLatitude( String.valueOf(localPassageiro.latitude) );
+        usuarioPassageiro.setLongitude( String.valueOf(localPassageiro.longitude) );
+
+        requisicao.setPassageiro(usuarioPassageiro);
+        requisicao.setStatus(Requisicao.STATUS_AGUARDADNDO);
+        requisicao.salvar();
     }
 
     private Address recuperaEndereco(String endereco){
@@ -139,16 +160,16 @@ public class PassageiroActivity extends AppCompatActivity
                 //recuperar latitude e longitude
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
-                LatLng meuLocal = new LatLng(latitude, longitude);
+                localPassageiro = new LatLng(latitude, longitude);
                 mMap.clear();
                 mMap.addMarker(
                         new MarkerOptions()
-                                .position(meuLocal)
+                                .position(localPassageiro)
                                 .title("Meu Local")
                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.usuario))
                 );
                 mMap.moveCamera(
-                        CameraUpdateFactory.newLatLngZoom(meuLocal, 17)
+                        CameraUpdateFactory.newLatLngZoom(localPassageiro, 17)
                 );
             }
 
